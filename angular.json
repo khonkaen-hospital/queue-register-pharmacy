@@ -31,9 +31,15 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@clr/icons/clr-icons.min.css",
+              "node_modules/@clr/ui/clr-ui.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js",
+              "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
+              "node_modules/@clr/icons/clr-icons.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -127,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "electron-angular"
+  "defaultProject": "electron-angular",
+  "cli": {
+    "analytics": "c289808e-8756-4fa4-bc1d-91281d0a52cc"
+  }
 }
