@@ -1,13 +1,108 @@
 <!doctype html>
-<html lang="en">
+<html>
+
 <head>
   <meta charset="utf-8">
-  <title>ElectronAngular</title>
+  <title>Q4U</title>
   <base href="/">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+
+
+    .container {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader,
+    .loader:before,
+    .loader:after {
+      border-radius: 50%;
+      width: 2.5em;
+      height: 2.5em;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+      -webkit-animation: load7 1.8s infinite ease-in-out;
+      animation: load7 1.8s infinite ease-in-out;
+    }
+
+    .loader {
+      color: #0072a3;
+      font-size: 10px;
+      position: relative;
+      text-indent: -9999em;
+      -webkit-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-animation-delay: -0.16s;
+      animation-delay: -0.16s;
+    }
+
+    .loader:before,
+    .loader:after {
+      content: '';
+      position: absolute;
+      top: 0;
+    }
+
+    .loader:before {
+      left: -3.5em;
+      -webkit-animation-delay: -0.32s;
+      animation-delay: -0.32s;
+    }
+
+    .loader:after {
+      left: 3.5em;
+    }
+
+    @-webkit-keyframes load7 {
+
+      0%,
+      80%,
+      100% {
+        box-shadow: 0 2.5em 0 -1.3em;
+      }
+
+      40% {
+        box-shadow: 0 2.5em 0 0;
+      }
+    }
+
+    @keyframes load7 {
+
+      0%,
+      80%,
+      100% {
+        box-shadow: 0 2.5em 0 -1.3em;
+      }
+
+      40% {
+        box-shadow: 0 2.5em 0 0;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="container">
+      <h1 style="margin-top:0; font-weight: bold; color:#666666; font-size: 5em;">Q4U</h1>
+      <div class="loader">Loading...</div>
+      <br>
+      <br>
+      <strong style="color:#a7a7a7; text-align:center;">Loading...</strong>
+    </div>
+  </app-root>
 </body>
+
 </html>
