@@ -3,15 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm-run-all -p ng:serve electron:serve",
     "ng:serve": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
+    "start": "npx electron main.js",
+    "start-dev": "npm-run-all -p ng:serve electron:serve",
+    "build": "npm run electron:serve-tsc && ng build --prod --base-href ./",
     "postinstall": "electron-builder install-app-deps",
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
-    "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron main.js --serve"
+    "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron main.js --serve",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +36,7 @@
     "@angular-devkit/build-angular": "~0.1100.2",
     "@angular/cli": "~11.0.2",
     "@angular/compiler-cli": "~11.0.1",
+    "@types/electron": "^1.6.10",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",

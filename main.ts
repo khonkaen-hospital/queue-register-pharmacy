@@ -2,9 +2,9 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-let win: BrowserWindow = null;
-const args = process.argv.slice(1),
-  serve = args.some(val => val === '--serve');
+let win: BrowserWindow;
+const args = process.argv.slice(1);
+const serve = args.some(val => val === '--serve');
 
 function createWindow(): BrowserWindow {
 
@@ -28,15 +28,15 @@ function createWindow(): BrowserWindow {
   if (serve) {
 
     win.webContents.openDevTools();
-
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
 
   } else {
+    console.log('PROD');
     win.loadURL(url.format({
-      pathname: path.join(__dirname, 'dist/index.html'),
+      pathname: path.join(__dirname, 'dist/electron-angular/index.html'),
       protocol: 'file:',
       slashes: true
     }));
