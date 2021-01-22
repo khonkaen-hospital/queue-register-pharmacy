@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { User } from '../user';
-import { LoginResponse } from './auth.service';
+import { UserAuth } from './auth.service';
 
-const TOKEN_KEY = 'auth-token';
-const USER_KEY = 'auth-user';
+const TOKEN_KEY = 'jwt_token';
+const USER_KEY = 'currentUser';
+const REMEMBERME_KEY = 'rememberCurrentUser';
 
 @Injectable({
   providedIn: 'root'
@@ -12,22 +12,27 @@ export class TokenStorageService {
 
   constructor() { }
 
-  signOut(): void {
-    window.localStorage.clear();
+  setRememberMe(value: string): void {
+    window.localStorage.setItem(REMEMBERME_KEY, value);
   }
 
-  public saveToken(token: string): void {
+  resetCredentials(): void {
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.removeItem(USER_KEY);
+  }
+
+  public setToken(token: string): void {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.setItem(TOKEN_KEY, token);
   }
 
-  public getToken(): string | null {
-    return window.localStorage.getItem(TOKEN_KEY);
-  }
-
-  public saveUser(user: LoginResponse): void {
+  public setCurrentUser(user: UserAuth): void {
     window.localStorage.removeItem(USER_KEY);
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+
+  public getToken(): string | null {
+    return window.localStorage.getItem(TOKEN_KEY);
   }
 
   public getUser(): string | null {

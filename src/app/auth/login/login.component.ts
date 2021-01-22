@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { ClrLoadingState } from '@clr/angular';
-import { Router } from '@angular/router';
+import { Router, Route, ActivatedRoute } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { TokenStorageService } from '../services/token-storage.service';
 
 @Component({
@@ -20,14 +21,19 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private tokenStorage: TokenStorageService,
-    private route: Router
-  ) { }
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
+    if (!this.authService.isTokenExpired()) {
+      this.router.navigate(['/queue-calling/index'])
+    }
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
+      rememberMe: [false]
     });
   }
 
@@ -36,19 +42,17 @@ export class LoginComponent implements OnInit {
 
     } else {
       this.submitBtnState = ClrLoadingState.LOADING;
-      this.authService.login(this.form.value).subscribe(result => {
-        if (result.message) {
-          this.isError = true;
-          this.message = result.message;
-          this.resetInvalidState();
-        } else {
-          console.group('subscribe');
-          this.tokenStorage.saveToken(result.token);
-          this.tokenStorage.saveUser(result);
-          this.route.navigateByUrl('queue-calling/index');
-        }
-        this.submitBtnState = ClrLoadingState.SUCCESS;
-      })
+      this.authService.login(this.form.value)
+        .subscribe(result => {
+          if (result?.token) {
+            this.router.navigateByUrl('queue-calling/index');
+          } else {
+            this.isError = true;
+            this.message = result.message || ' Username & Password ไม่ถูกต้อง!';
+            this.resetInvalidState();
+          }
+          this.submitBtnState = ClrLoadingState.SUCCESS;
+        })
     }
   }
 

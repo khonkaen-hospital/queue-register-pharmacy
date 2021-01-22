@@ -1,16 +1,17 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { User } from 'src/app/auth/user';
+import { HttpClient } from '@angular/common/http';
 import { TokenStorageService } from './token-storage.service';
+import { User } from 'src/app/auth/user';
+import { map } from 'rxjs/operators';
+import { JwtHelperService } from "@auth0/angular-jwt";
 
-export interface UserAuth {
+export interface UserLogin {
   username: string,
   password: string
 }
 
-export interface LoginResponse {
+export interface UserAuth {
   token: string,
   servicePoints?: Array<any>,
   statusCode: number,
@@ -24,29 +25,37 @@ export class AuthService {
 
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<User>;
+  private helper: JwtHelperService = new JwtHelperService();
 
   constructor(
     @Inject('API_URL') private apiUrl: String,
     private http: HttpClient,
     private tokenStorage: TokenStorageService
   ) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
-    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  login(data: UserAuth): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl + '/login', data).pipe(map(user => {
-      if (user.token) {
-        this.tokenStorage.saveToken(user.token);
-        this.tokenStorage.saveUser(user);
+  login(data: UserLogin): Observable<UserAuth> {
+    return this.http.post<UserAuth>(this.apiUrl + '/login', data).pipe(map(user => {
+      if (user && user.token) {
+        this.tokenStorage.setToken(user.token);
+        this.tokenStorage.setCurrentUser(user);
       }
-      this.currentUserSubject.next(user);
       return user;
     }));
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    this.tokenStorage.resetCredentials();
+  }
+
+  getTokenExpirationDate(): Date | null {
+    const token = this.tokenStorage.getToken() || undefined;
+    return this.helper.getTokenExpirationDate(token);
+  }
+
+  isTokenExpired(): boolean {
+    const token = this.tokenStorage.getToken();
+    if (!token) return true;
+    return this.helper.isTokenExpired(token);
   }
 }

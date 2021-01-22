@@ -1,6 +1,6 @@
 <header class="header-6">
   <div class="branding">
-    <a [routerLink]="['queue-calling']" class="nav-link">
+    <a [routerLink]="['/queue-calling/index']" class="nav-link">
       <clr-icon style="color:orange;" shape="qr-code"></clr-icon>
       <span class="title">Q4U</span>
     </a>
@@ -10,4 +10,9 @@
       <input id="search_input" type="text" placeholder="Search for keywords...">
     </label>
   </form>
+  <div class="header-actions">
+    <a href="#" (click)="logout()" class="nav-link nav-text">
+      Log Out
+    </a>
+  </div>
 </header>

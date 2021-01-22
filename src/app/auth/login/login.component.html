@@ -18,6 +18,11 @@
         <clr-control-error>กรุณากรอก password</clr-control-error>
       </clr-password-container>
 
+      <clr-checkbox-wrapper>
+        <label>Remember me</label>
+        <input type="checkbox" name="rememberMe" clrCheckbox formControlName="rememberMe" />
+      </clr-checkbox-wrapper>
+
       <div *ngIf="isError" style="margin-bottom: 5px;" class="error active">
         {{message}}
       </div>
