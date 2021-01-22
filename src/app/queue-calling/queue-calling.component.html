@@ -1,0 +1,14 @@
+<h3>Queues</h3>
+
+<clr-datagrid [clrDgLoading]="loading">
+
+  <clr-dg-column [style.width.px]="100">ID</clr-dg-column>
+  <clr-dg-column>Name</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let q of queues" [clrDgItem]="queues">
+    <clr-dg-cell><strong>{{q.queue_number}}</strong></clr-dg-cell>
+    <clr-dg-cell>{{q.first_name}} {{q.last_name}}</clr-dg-cell>
+  </clr-dg-row>
+
+
+</clr-datagrid>

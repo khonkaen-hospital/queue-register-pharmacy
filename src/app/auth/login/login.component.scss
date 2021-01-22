@@ -1,0 +1,19 @@
+.login-wrapper{
+  background:none;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-wrapper .login:after {
+  position: relative;
+}
+
+.login-wrapper .login .login-group .btn {
+  margin-top: 0;
+}
+
+.clr-input{
+  line-height: 50px;
+  height: 50px;
+  font-weight: bold;
+}

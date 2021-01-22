@@ -1,0 +1,27 @@
+<div class="login-wrapper">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login">
+    <section style="text-align: center;" class="title">
+      Q4U
+      <h5 style="margin-top:0;" class="hint">ระบบบริหารจัดการคิว</h5>
+    </section>
+    <div class="login-group" style="margin-top:0;">
+
+      <clr-input-container>
+        <label class="clr-sr-only">Username</label>
+        <input type="text" name="username" formControlName="username" clrInput placeholder="Username" />
+        <clr-control-error>กรุณากรอก username</clr-control-error>
+      </clr-input-container>
+
+      <clr-password-container>
+        <label class="clr-sr-only">Password</label>
+        <input type="password" name="password" formControlName="password" clrPassword placeholder="Password" />
+        <clr-control-error>กรุณากรอก password</clr-control-error>
+      </clr-password-container>
+
+      <div *ngIf="isError" style="margin-bottom: 5px;" class="error active">
+        {{message}}
+      </div>
+      <button [clrLoading]="submitBtnState" type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </form>
+</div>
