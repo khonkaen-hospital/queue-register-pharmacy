@@ -39,6 +39,9 @@ export class AuthService {
       if (user && user.token) {
         this.tokenStorage.setToken(user.token);
         this.tokenStorage.setCurrentUser(user);
+        if (user.servicePoints !== undefined) {
+          this.tokenStorage.setServicePoints(user.servicePoints);
+        }
       }
       return user;
     }));

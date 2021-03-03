@@ -1,31 +1,132 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { QueueService } from './queue.service';
-
+import { HttpParams } from '@angular/common/http';
+import { ElectronService } from 'ngx-electron';
 @Component({
   selector: 'app-queue-calling',
   templateUrl: './queue-calling.component.html',
   styleUrls: ['./queue-calling.component.scss']
 })
-export class QueueCallingComponent implements OnInit {
+export class QueueCallingComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('registerForm') registerForm: ElementRef;
 
   queues: Array<any> = [];
+  servicePoints: Array<any> = [];
+  priorities: Array<any> = [];
+  hisVisits: Array<any> = [];
   selected: Array<any> = [];
   loading = false;
+  servicePointId: string | null;
+  servicePointName: string | null;
+  prioritieId: string | null;
+  search: string;
 
   constructor(
-    private queueService: QueueService
+    private queueService: QueueService,
+    private cdr: ChangeDetectorRef,
+    private electronService: ElectronService
   ) { }
 
   ngOnInit(): void {
-    this.getQueueActive();
+    this.setInitCurrentData();
+    this.getPriorities();
+    this.getServicePoints();
+    this.getQueueActive(this.servicePointId || '');
+    this.getHisVisits();
+    this.setFocus();
   }
 
-  getQueueActive() {
+  setFocus() {
+    setTimeout(() => {
+      let ele = this.registerForm.nativeElement['search'];
+      console.log(ele);
+      ele.focus();
+    }, 100);
+  }
+
+  setInitCurrentData() {
+    this.servicePointName = (localStorage.getItem('currentServicePointName'));
+    this.servicePointId = (localStorage.getItem('currentServicePointID'));
+    this.prioritieId = (localStorage.getItem('prioritieId'));
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
+
+  getQueueActive(servicePointId: string, query = '') {
+
+    const httpParams = new HttpParams()
+      .set('servicePointId', servicePointId)
+      .set('query', query);
+    console.log('servicePointId', httpParams.toString(), servicePointId);
     this.loading = true;
-    this.queueService.getQueue().subscribe(results => {
+    this.queueService.getVisitHistoryQueue(httpParams).subscribe(results => {
       this.queues = results.results;
       this.loading = false;
     });
+  }
+
+  getPriorities() {
+    this.queueService.getPriorities().subscribe(results => {
+      this.priorities = results.results;
+    });
+  }
+
+  getHisVisits() {
+    this.queueService.getHisVisits().subscribe(results => {
+      this.hisVisits = results.results;
+    });
+  }
+
+  getServicePoints() {
+    this.servicePoints = JSON.parse(localStorage.getItem('servicePoints') || '[]');
+  }
+
+  onChangeServicePoint(event: any): void {
+    console.log(event);
+    let selectElementText = event.target['options'][event.target['options'].selectedIndex].text;
+    localStorage.setItem('currentServicePointID', event.target.value);
+    localStorage.setItem('currentServicePointName', selectElementText);
+    this.servicePointName = selectElementText;
+    this.getQueueActive(event.target.value);
+  }
+
+  onChangePriorities(event: any): void {
+    localStorage.setItem('prioritieId', event.target.value);
+  }
+
+  onRegister(patientVisit: any) {
+    if (this.servicePointId && this.prioritieId) {
+      let data = {
+        hn: patientVisit.hn,
+        vn: patientVisit.vn,
+        clinicCode: patientVisit.clinic_code,
+        priorityId: this.prioritieId,
+        servicePointId: this.servicePointId,
+        dateServ: patientVisit.date_serv,
+        timeServ: patientVisit.time_serv,
+        hisQueue: patientVisit.his_queue,
+        title: patientVisit.title,
+        firstName: patientVisit.first_name,
+        lastName: patientVisit.last_name,
+        birthDate: patientVisit.birthdate,
+        sex: patientVisit.sex
+      }
+      this.queueService.registerQueue(data).subscribe(result => {
+        console.log(result);
+        this.getQueueActive(this.servicePointId || '');
+      })
+    }
+  }
+
+
+  printSlip(data: any) {
+    this.queueService.getPrintData(data.queue_id).subscribe(result => {
+      this.electronService.ipcRenderer.sendSync('printQueue', result.data);
+    })
+
   }
 
 }

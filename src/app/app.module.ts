@@ -9,7 +9,7 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { JwtInterceptor } from './auth/jwt.interceptor';
-
+import { NgxElectronModule } from 'ngx-electron';
 @NgModule({
   declarations: [
     AppComponent
@@ -21,7 +21,8 @@ import { JwtInterceptor } from './auth/jwt.interceptor';
     AppRoutingModule,
     ClarityModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxElectronModule
   ],
   providers: [
     { provide: 'API_URL', useValue: environment.apiUrl },

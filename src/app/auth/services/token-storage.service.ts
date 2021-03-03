@@ -4,6 +4,7 @@ import { UserAuth } from './auth.service';
 const TOKEN_KEY = 'jwt_token';
 const USER_KEY = 'currentUser';
 const REMEMBERME_KEY = 'rememberCurrentUser';
+const SERVICEPOINTS_KEY = 'servicePoints';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class TokenStorageService {
   resetCredentials(): void {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.removeItem(USER_KEY);
+    window.localStorage.removeItem(SERVICEPOINTS_KEY);
   }
 
   public setToken(token: string): void {
@@ -29,6 +31,10 @@ export class TokenStorageService {
   public setCurrentUser(user: UserAuth): void {
     window.localStorage.removeItem(USER_KEY);
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+
+  public setServicePoints(servicePoints: Array<any>): void {
+    window.localStorage.setItem(SERVICEPOINTS_KEY, JSON.stringify(servicePoints));
   }
 
   public getToken(): string | null {

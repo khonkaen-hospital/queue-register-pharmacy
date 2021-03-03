@@ -1,14 +1,126 @@
-<h3>Queues</h3>
+<h3>ทะเบียนคิว ({{servicePointName}})</h3>
 
-<clr-datagrid [clrDgLoading]="loading">
-
-  <clr-dg-column [style.width.px]="100">ID</clr-dg-column>
-  <clr-dg-column>Name</clr-dg-column>
-
-  <clr-dg-row *clrDgItems="let q of queues" [clrDgItem]="queues">
-    <clr-dg-cell><strong>{{q.queue_number}}</strong></clr-dg-cell>
-    <clr-dg-cell>{{q.first_name}} {{q.last_name}}</clr-dg-cell>
-  </clr-dg-row>
+<div class="card card-block">
+  <form #f="ngForm" #registerForm>
 
 
-</clr-datagrid>
+    <div class="clr-row">
+      <div class="clr-col-2">
+        <clr-select-container>
+          <label>ห้องตรวจ</label>
+          <select [(ngModel)]="servicePointId" (change)="onChangeServicePoint($event)" clrSelect name="servicePointId">
+            <option *ngFor="let s of servicePoints" value="{{s.service_point_id}}">{{s.service_point_name}}</option>
+          </select>
+        </clr-select-container>
+      </div>
+      <div class="clr-col-3">
+        <clr-select-container>
+          <label>ประเภทผู้ป่วย</label>
+          <select [(ngModel)]="prioritieId" (change)="onChangePriorities($event)" clrSelect name="prioritieId">
+            <option *ngFor="let p of priorities" value="{{p.priority_id}}">{{p.priority_name}}</option>
+          </select>
+        </clr-select-container>
+      </div>
+      <div class="clr-col-6">
+        <clr-input-container>
+          <label>ค้นเพื่อลงทะเบียนรับยา</label>
+          <div></div>
+          <input (keyup.enter)="onRegister($event)" clrInput placeholder="คำค้น..." name="search"
+            [(ngModel)]="search" />
+        </clr-input-container>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+<br>
+
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink>ทะเบียนผู้มารับบริการ</button>
+    <clr-tab-content *clrIfActive="false">
+      <clr-datagrid [clrDgLoading]="loading">
+
+        <clr-dg-placeholder>We couldn't find any patient visit!</clr-dg-placeholder>
+
+        <clr-dg-column [clrDgField]="'hn'" [style.width.px]="100">HN</clr-dg-column>
+        <clr-dg-column [clrDgField]="'first_name'">Name</clr-dg-column>
+        <clr-dg-column [clrDgField]="'clinic_name'">Clinic</clr-dg-column>
+        <clr-dg-column>Time</clr-dg-column>
+        <clr-dg-column [style.width.px]="200">Action</clr-dg-column>
+
+        <clr-dg-row *clrDgItems="let v of hisVisits" [clrDgItem]="queues">
+          <clr-dg-cell> {{v.hn}}</clr-dg-cell>
+          <clr-dg-cell>{{v.title}}{{v.first_name}} {{v.last_name}}</clr-dg-cell>
+          <clr-dg-cell>{{v.clinic_name}}</clr-dg-cell>
+          <clr-dg-cell>{{v.time_serv}}</clr-dg-cell>
+          <clr-dg-cell>
+
+            <button (click)="onRegister(v)" class="btn btn-block btn-outline-success">
+              <clr-icon shape="printer"></clr-icon> สร้างคิว
+            </button>
+
+          </clr-dg-cell>
+
+
+        </clr-dg-row>
+
+
+        <clr-dg-footer>
+          <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Users per page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} users
+          </clr-dg-pagination>
+        </clr-dg-footer>
+
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink>ข้อมูลผู้ป่วยที่ลงทะเบียนรอรับยา</button>
+    <clr-tab-content *clrIfActive="true">
+      <clr-datagrid [(clrDgSelected)]="selected" [clrDgLoading]="loading">
+
+        <clr-dg-placeholder>We couldn't find any queue!</clr-dg-placeholder>
+
+        <clr-dg-column [style.width.px]="100">ID</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">HN</clr-dg-column>
+        <clr-dg-column>Name</clr-dg-column>
+        <clr-dg-column>Priority</clr-dg-column>
+        <clr-dg-column>Clinic</clr-dg-column>
+        <clr-dg-column [style.width.px]="200">Action</clr-dg-column>
+
+        <clr-dg-row *clrDgItems="let q of queues" [clrDgItem]="queues">
+          <clr-dg-cell><strong style="font-size: large;">{{q.queue_number}}</strong></clr-dg-cell>
+          <clr-dg-cell> {{q.hn}}</clr-dg-cell>
+          <clr-dg-cell>{{q.first_name}} {{q.last_name}}</clr-dg-cell>
+          <clr-dg-cell>{{q.priority_name}}</clr-dg-cell>
+          <clr-dg-cell>{{q.service_point_name}}</clr-dg-cell>
+          <clr-dg-cell>
+            <div class="btn-group btn-primary">
+              <button (click)="printSlip(q)" class="btn">
+                <clr-icon shape="printer"></clr-icon> พิมพ์
+              </button>
+              <button class="btn btn-danger">
+                <clr-icon shape="undo"></clr-icon> ยกเลิก
+              </button>
+            </div>
+          </clr-dg-cell>
+
+
+        </clr-dg-row>
+
+
+        <clr-dg-footer>
+          <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Users per page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} users
+          </clr-dg-pagination>
+        </clr-dg-footer>
+
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>

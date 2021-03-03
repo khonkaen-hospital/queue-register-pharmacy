@@ -1,6 +1,8 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+
+const printQueue = require('./print.js');
 
 let win: BrowserWindow;
 const args = process.argv.slice(1);
@@ -81,3 +83,11 @@ try {
   // Catch Error
   // throw e;
 }
+
+ipcMain.on('printQueue', (event, arg) => {
+  console.log('IpcMain: PrintQueue', arg);
+  printQueue(arg, '10.3.42.77');
+  event.returnValue = true;
+});
+
+

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { QueueCallingRoutingModule } from './queue-calling-routing.module';
 import { QueueCallingComponent } from './queue-calling.component';
 import { ClarityModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { ClarityModule } from '@clr/angular';
   imports: [
     CommonModule,
     ClarityModule,
+    FormsModule,
     QueueCallingRoutingModule
   ]
 })

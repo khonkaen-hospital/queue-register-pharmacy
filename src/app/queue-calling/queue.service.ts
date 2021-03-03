@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,7 +12,33 @@ export class QueueService {
     private http: HttpClient
   ) { }
 
-  getQueue(): Observable<any> {
+  getActiveQueue(): Observable<any> {
     return this.http.get(this.apiUrl + '/queue/all-queue/active');
+  }
+
+  getVisitHistoryQueue(params: HttpParams): Observable<any> {
+    return this.http.get(this.apiUrl + '/queue/his-visit-history', { params: params });
+  }
+
+  getPrintData(queueId: string): Observable<any> {
+    return this.http.post(this.apiUrl + '/print/queue/prepare/data', { queueId: queueId });
+  }
+
+  registerQueue(data: any): Observable<any> {
+    // const body = {
+    //   hn: data.hn,
+    //   servicePointId: data.servicePointId,
+    //   priorityId: data.priorityId
+    // };
+    // return this.http.post(this.apiUrl + '/queue/prepare/register', body);
+    return this.http.post(this.apiUrl + '/queue/register/pharmacy-robot', data);
+  }
+
+  getHisVisits(): Observable<any> {
+    return this.http.get(this.apiUrl + '/queue/his-visit');
+  }
+
+  getPriorities(): Observable<any> {
+    return this.http.get(this.apiUrl + '/priorities');
   }
 }
