@@ -42,8 +42,8 @@ function printQueue(data, PrinterIp) {
           .text('วันที่: ' + dateTime)
           .text('')
           .cut()
-          .font('B')
 
+          .font('B')
           .size(2, 1)
           .text(data.hosname)
           .size(1, 1)
@@ -59,11 +59,14 @@ function printQueue(data, PrinterIp) {
           .text('ประเภท')
           .style('B')
           .text(data.priorityName)
+          .style('U')
+          .text('HN')
+          .style('B')
+          .text(data.hn)
           .size(1, 1)
           .text('')
           .text('วันที่ ' + dateTime)
-          .qrimage(data.qrcode, { type: 'png', mode: 'dhdw', size: 2 }, function (err) {
-            this.text('**********************');
+          .qrimage(data.qrcode, { type: 'png', mode: 'dhdw', size: 3 }, function (err) {
             this.text('สแกน QR CODE ผ่านแอปพลิเคชัน H4U');
             this.text('');
             this.cut();

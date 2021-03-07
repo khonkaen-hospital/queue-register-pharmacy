@@ -34,8 +34,8 @@ export class QueueService {
     return this.http.post(this.apiUrl + '/queue/register/pharmacy-robot', data);
   }
 
-  getHisVisits(): Observable<any> {
-    return this.http.get(this.apiUrl + '/queue/his-visit');
+  getHisVisits(params: HttpParams): Observable<any> {
+    return this.http.get(this.apiUrl + '/queue/his-visit-robot', { params: params });
   }
 
   getPriorities(): Observable<any> {

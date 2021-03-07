@@ -85,7 +85,6 @@ try {
 }
 
 ipcMain.on('printQueue', (event, arg) => {
-  console.log('IpcMain: PrintQueue', arg);
   printQueue(arg, '10.3.42.77');
   event.returnValue = true;
 });

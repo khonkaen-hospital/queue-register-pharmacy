@@ -2,6 +2,16 @@ import { Component, OnInit, ChangeDetectorRef, AfterViewInit, ElementRef, ViewCh
 import { QueueService } from './queue.service';
 import { HttpParams } from '@angular/common/http';
 import { ElectronService } from 'ngx-electron';
+
+
+interface Patient {
+  hn: string;
+  fullname: string;
+  clinic: string;
+  date?: string;
+  time?: string;
+  data?: Array<any>
+}
 @Component({
   selector: 'app-queue-calling',
   templateUrl: './queue-calling.component.html',
@@ -10,6 +20,7 @@ import { ElectronService } from 'ngx-electron';
 export class QueueCallingComponent implements OnInit, AfterViewInit {
 
   @ViewChild('registerForm') registerForm: ElementRef;
+  @ViewChild('btnConfirmPrint') btnConfirmPrint: ElementRef;
 
   queues: Array<any> = [];
   servicePoints: Array<any> = [];
@@ -21,6 +32,9 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   servicePointName: string | null;
   prioritieId: string | null;
   search: string;
+  printConfirmModal: boolean = false;
+  selectedPatient: Patient;
+  timer: any;
 
   constructor(
     private queueService: QueueService,
@@ -35,6 +49,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     this.getQueueActive(this.servicePointId || '');
     this.getHisVisits();
     this.setFocus();
+    this.selectedPatient = { hn: '', fullname: '', clinic: '' };
   }
 
   setFocus() {
@@ -53,6 +68,42 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.cdr.detectChanges();
+  }
+
+  delaySerch(event: any) {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(() => {
+      this.onSearch(event);
+    }, 400);
+  }
+
+  onSearch(event: any) {
+    console.log(event);
+    const httpParams = new HttpParams().set('query', this.search || '');
+    this.queueService.getHisVisits(httpParams).subscribe(results => {
+      this.hisVisits = results.results;
+      if (this.hisVisits.length === 1) {
+        this.printConfirmModal = true;
+        this.selectedPatient = {
+          hn: this.hisVisits[0].hn,
+          fullname: this.hisVisits[0].title + this.hisVisits[0].first_name + ' ' + this.hisVisits[0].last_name,
+          clinic: this.hisVisits[0].clinic_name,
+          time: this.hisVisits[0].time_serv,
+          data: this.hisVisits[0]
+        }
+        setTimeout(() => {
+          this.btnConfirmPrint.nativeElement.focus();
+        }, 550);
+
+      }
+    });
+  }
+
+  onConfirmPrint() {
+    this.onRegister(this.selectedPatient.data);
   }
 
   getQueueActive(servicePointId: string, query = '') {
@@ -75,7 +126,8 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   }
 
   getHisVisits() {
-    this.queueService.getHisVisits().subscribe(results => {
+    const httpParams = new HttpParams().set('query', this.search || '');
+    this.queueService.getHisVisits(httpParams).subscribe(results => {
       this.hisVisits = results.results;
     });
   }
@@ -116,15 +168,19 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
       }
       this.queueService.registerQueue(data).subscribe(result => {
         console.log(result);
+        this.search = '';
+        this.printSlip(result.queueId);
         this.getQueueActive(this.servicePointId || '');
+        this.getHisVisits();
+        this.printConfirmModal = false;
       })
     }
   }
 
 
-  printSlip(data: any) {
-    this.queueService.getPrintData(data.queue_id).subscribe(result => {
-      this.electronService.ipcRenderer.sendSync('printQueue', result.data);
+  printSlip(queue_id: string) {
+    this.queueService.getPrintData(queue_id).subscribe(result => {
+      this.electronService.ipcRenderer.sendSync('printQueue', { ...result.data, ...{ servicePointId: this.servicePointId } });
     })
 
   }
