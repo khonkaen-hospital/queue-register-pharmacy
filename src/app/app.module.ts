@@ -10,15 +10,19 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common
 import { environment } from 'src/environments/environment';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { NgxElectronModule } from 'ngx-electron';
+import { SettingsComponent } from './settings/settings.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
     AuthModule,
     LayoutsModule,
     AppRoutingModule,
+    FormsModule,
     ClarityModule,
     HttpClientModule,
     BrowserAnimationsModule,

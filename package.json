@@ -1,15 +1,19 @@
 {
-  "name": "electron-angular",
-  "version": "0.0.0",
+  "name": "q4u-register",
+  "version": "0.0.1",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "ng:serve": "ng serve",
     "start": "npx electron main.js",
     "start-dev": "npm-run-all -p ng:serve electron:serve",
     "build": "npm run electron:serve-tsc && ng build --prod --base-href ./",
+    "build:dev": "npm run build -- -c dev",
+    "build:prod": "npm run build -- -c production",
     "postinstall": "electron-builder install-app-deps",
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron main.js --serve",
+    "electron:build": "npm run build:prod && electron-builder build --macos --windows",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -50,7 +54,7 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "electron": "^11.2.0",
-    "electron-builder": "^22.9.1",
+    "electron-builder": "^22.10.5",
     "electron-rebuild": "^2.3.5",
     "electron-reload": "^1.5.0",
     "jasmine-core": "~3.6.0",
@@ -66,5 +70,25 @@
     "tslint": "~6.1.0",
     "typescript": "~4.0.2",
     "wait-on": "^5.2.1"
+  },
+  "build": {
+    "appId": "com.q4uregister.app",
+    "mac": {
+      "category": "kkh.app.ez.q4uregister"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "output": "release/"
+    },
+    "publish": null,
+    "files": [
+      "dist/**/*",
+      "print.js",
+      "main.js",
+      "node_modules/**/*",
+      "package.json"
+    ]
   }
 }
