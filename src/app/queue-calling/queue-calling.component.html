@@ -40,7 +40,7 @@
 <clr-tabs>
   <clr-tab>
     <button clrTabLink>ทะเบียนผู้มารับบริการ</button>
-    <clr-tab-content *clrIfActive="false">
+    <clr-tab-content *clrIfActive="true">
       <clr-datagrid [clrDgLoading]="loading">
 
         <clr-dg-placeholder>We couldn't find any patient visit!</clr-dg-placeholder>
@@ -82,7 +82,7 @@
   </clr-tab>
   <clr-tab>
     <button clrTabLink>ข้อมูลผู้ป่วยที่ลงทะเบียนรอรับยา</button>
-    <clr-tab-content *clrIfActive="true">
+    <clr-tab-content *clrIfActive="false">
       <clr-datagrid [(clrDgSelected)]="selected" [clrDgLoading]="loading">
 
         <clr-dg-placeholder>We couldn't find any queue!</clr-dg-placeholder>
@@ -104,7 +104,7 @@
           <clr-dg-cell>{{q.service_point_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-primary">
-              <button (click)="printSlip(q)" class="btn">
+              <button (click)="printSlip(q.queue_id,q.clinic_name)" class="btn">
                 <clr-icon shape="printer"></clr-icon> พิมพ์
               </button>
               <button class="btn btn-danger">

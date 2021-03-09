@@ -36,7 +36,7 @@ function printQueue(data, PrinterIp) {
           .style('U')
           .text('ห้องตรวจ')
           .style('B')
-          .text(data.servicePointName)
+          .text(data.clinicName)
           .barcode(data.hn, 'CODE39', { height: 70 })
           .text('')
           .text('วันที่: ' + dateTime)

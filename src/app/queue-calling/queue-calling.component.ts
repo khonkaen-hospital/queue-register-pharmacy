@@ -169,7 +169,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
       this.queueService.registerQueue(data).subscribe(result => {
         console.log(result);
         this.search = '';
-        this.printSlip(result.queueId);
+        this.printSlip(result.queueId, patientVisit.clinic_name);
         this.getQueueActive(this.servicePointId || '');
         this.getHisVisits();
         this.printConfirmModal = false;
@@ -177,12 +177,16 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-  printSlip(queue_id: string) {
+  printSlip(queue_id: string, clinic_name: string) {
     this.queueService.getPrintData(queue_id).subscribe(result => {
-      this.electronService.ipcRenderer.sendSync('printQueue', { ...result.data, ...{ servicePointId: this.servicePointId } });
+      this.electronService.ipcRenderer.sendSync('printQueue', {
+        ...result.data, ...{
+          printerIp: localStorage.getItem('printerIp') || '',
+          servicePointId: this.servicePointId,
+          clinicName: clinic_name
+        }
+      });
     })
-
   }
 
 }

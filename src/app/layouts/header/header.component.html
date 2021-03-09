@@ -5,25 +5,23 @@
       <span class="title">Q4U</span>
     </a>
   </div>
+
+  <div class="header-nav">
+    <a href="javascript://" [routerLink]="'/settings'" class="nav-link nav-text">Settings</a>
+  </div>
   <!-- <form class="search">
     <label for="search_input">
       <input id="search_input" type="text" placeholder="Search for keywords...">
     </label>
   </form> -->
 
+
   <div class="header-actions">
-    <div class="dropdown bottom-left">
-      <button class="nav-icon dropdown-toggle" aria-label="toggle settings menu">
-        <cds-icon shape="cog"></cds-icon>
-        <cds-icon shape="angle" direction="down"></cds-icon>
-      </button>
-      <div class="dropdown-menu">
-        <a [routerLink]="'/settings'" class="dropdown-item">ตั้งค่า</a>
-        <a href="#" (click)="logout()" class="nav-link nav-text">
-          Log Out
-        </a>
-      </div>
-    </div>
+    <a href="#" (click)="logout()" class="nav-link nav-text">
+      Log Out
+    </a>
   </div>
+
+
 
 </header>

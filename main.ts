@@ -85,7 +85,7 @@ try {
 }
 
 ipcMain.on('printQueue', (event, arg) => {
-  printQueue(arg, '10.3.42.77');
+  printQueue(arg, arg.printerIp);
   event.returnValue = true;
 });
 

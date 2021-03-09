@@ -1,8 +1,11 @@
-<p>settings works!</p>
-
-<form clrForm>
-  <clr-input-container>
-    <label>Printer Ip</label>
-    <input clrInput type="text" [(ngModel)]="printerIp" name="printerIp" />
-  </clr-input-container>
-</form>
+<h3>ตั้งค่า</h3>
+<div class="card card-block">
+  <form clrForm>
+    <clr-input-container>
+      <label>Printer Ip</label>
+      <input clrInput type="text" [(ngModel)]="printerIp" name="printerIp" />
+    </clr-input-container>
+    <br>
+    <button class="btn btn-primary" (click)="saveSettings()" type="button">บันทึก</button>
+  </form>
+</div>
