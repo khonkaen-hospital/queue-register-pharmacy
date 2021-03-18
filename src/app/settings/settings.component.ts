@@ -12,11 +12,10 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private router: Router
-  ) {
-    this.printerIp = localStorage.getItem('printerIp') || '';
-  }
+  ) { }
 
   ngOnInit(): void {
+    this.printerIp = localStorage.getItem('printerIp') || '';
   }
 
   saveSettings(): void {

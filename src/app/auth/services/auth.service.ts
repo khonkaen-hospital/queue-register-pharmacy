@@ -5,7 +5,7 @@ import { TokenStorageService } from './token-storage.service';
 import { User } from 'src/app/auth/user';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from "@auth0/angular-jwt";
-
+import { timeout } from 'rxjs/operators';
 export interface UserLogin {
   username: string,
   password: string
@@ -35,16 +35,17 @@ export class AuthService {
   }
 
   login(data: UserLogin): Observable<UserAuth> {
-    return this.http.post<UserAuth>(this.apiUrl + '/login', data).pipe(map(user => {
-      if (user && user.token) {
-        this.tokenStorage.setToken(user.token);
-        this.tokenStorage.setCurrentUser(user);
-        if (user.servicePoints !== undefined) {
-          this.tokenStorage.setServicePoints(user.servicePoints);
+    return this.http.post<UserAuth>(this.apiUrl + '/login', data)
+      .pipe(map(user => {
+        if (user && user.token) {
+          this.tokenStorage.setToken(user.token);
+          this.tokenStorage.setCurrentUser(user);
+          if (user.servicePoints !== undefined) {
+            this.tokenStorage.setServicePoints(user.servicePoints);
+          }
         }
-      }
-      return user;
-    }));
+        return user;
+      }));
   }
 
   logout() {

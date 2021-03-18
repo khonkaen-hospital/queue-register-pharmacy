@@ -23,11 +23,13 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   @ViewChild('btnConfirmPrint') btnConfirmPrint: ElementRef;
 
   queues: Array<any> = [];
+  autoQueuPharmacy: Array<any> = [];
   servicePoints: Array<any> = [];
   priorities: Array<any> = [];
   hisVisits: Array<any> = [];
   selected: Array<any> = [];
   loading = false;
+  autoQueuPharmacyLoading = false;
   servicePointId: string | null;
   servicePointName: string | null;
   prioritieId: string | null;
@@ -43,11 +45,13 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+
     this.setInitCurrentData();
     this.getPriorities();
     this.getServicePoints();
     this.getQueueActive(this.servicePointId || '');
     this.getHisVisits();
+    this.getAutoQueuFormPharmacy('');
     this.setFocus();
     this.selectedPatient = { hn: '', fullname: '', clinic: '' };
   }
@@ -129,6 +133,15 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     const httpParams = new HttpParams().set('query', this.search || '');
     this.queueService.getHisVisits(httpParams).subscribe(results => {
       this.hisVisits = results.results;
+    });
+  }
+
+  getAutoQueuFormPharmacy(hn: string) {
+    this.autoQueuPharmacyLoading = true;
+    const httpParams = new HttpParams().set('hn', hn);
+    this.queueService.getAutoQueuFormPharmacy(httpParams).subscribe(results => {
+      this.autoQueuPharmacy = results.results;
+      this.autoQueuPharmacyLoading = false;
     });
   }
 

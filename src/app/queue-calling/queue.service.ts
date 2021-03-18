@@ -25,17 +25,15 @@ export class QueueService {
   }
 
   registerQueue(data: any): Observable<any> {
-    // const body = {
-    //   hn: data.hn,
-    //   servicePointId: data.servicePointId,
-    //   priorityId: data.priorityId
-    // };
-    // return this.http.post(this.apiUrl + '/queue/prepare/register', body);
     return this.http.post(this.apiUrl + '/queue/register/pharmacy-robot', data);
   }
 
   getHisVisits(params: HttpParams): Observable<any> {
     return this.http.get(this.apiUrl + '/queue/his-visit-robot', { params: params });
+  }
+
+  getAutoQueuFormPharmacy(params: HttpParams): Observable<any> {
+    return this.http.get(this.apiUrl + '/queue/his-pharmacy-robot', { params: params });
   }
 
   getPriorities(): Observable<any> {

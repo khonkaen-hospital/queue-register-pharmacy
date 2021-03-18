@@ -13,7 +13,7 @@
           </select>
         </clr-select-container>
       </div>
-      <div class="clr-col-3">
+      <div class="clr-col-4">
         <clr-select-container>
           <label>ประเภทผู้ป่วย</label>
           <select [(ngModel)]="prioritieId" (change)="onChangePriorities($event)" clrSelect name="prioritieId">
@@ -39,18 +39,18 @@
 
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink>ทะเบียนผู้มารับบริการ</button>
+    <button clrTabLink>ทะเบียนผู้ป่วยที่มารับบริการ</button>
     <clr-tab-content *clrIfActive="true">
       <clr-datagrid [clrDgLoading]="loading">
 
         <clr-dg-placeholder>We couldn't find any patient visit!</clr-dg-placeholder>
 
         <clr-dg-column [clrDgField]="'hn'" [style.width.px]="100">HN</clr-dg-column>
-        <clr-dg-column [clrDgField]="'hn'" [style.width.px]="100">VN</clr-dg-column>
+        <clr-dg-column [clrDgField]="'vn'" [style.width.px]="100">VN</clr-dg-column>
         <clr-dg-column [clrDgField]="'first_name'">ชื่อ-นามสกุล</clr-dg-column>
         <clr-dg-column [clrDgField]="'clinic_name'">ห้องตรวจ</clr-dg-column>
         <clr-dg-column>เวลาที่มารับบริการ</clr-dg-column>
-        <clr-dg-column [style.width.px]="200">Action</clr-dg-column>
+        <clr-dg-column [style.width.px]="240">Action</clr-dg-column>
 
         <clr-dg-row *clrDgItems="let v of hisVisits" [clrDgItem]="queues">
           <clr-dg-cell> {{v.hn}}</clr-dg-cell>
@@ -58,17 +58,14 @@
           <clr-dg-cell><strong>{{v.title}}{{v.first_name}} {{v.last_name}}</strong></clr-dg-cell>
           <clr-dg-cell>{{v.clinic_name}}</clr-dg-cell>
           <clr-dg-cell>{{v.date_serv | date}} {{v.time_serv}}</clr-dg-cell>
+
           <clr-dg-cell>
-
-            <button (click)="onRegister(v)" class="btn btn-block btn-sm btn-outline-success">
-              <clr-icon shape="printer"></clr-icon> สร้างคิว
+            <button (click)="onRegister(v)" class="btn btn-block   btn-outline-success">
+              <clr-icon shape="printer"></clr-icon> ลงทะเบียนหมายเลขรับยา
             </button>
-
           </clr-dg-cell>
 
-
         </clr-dg-row>
-
 
         <clr-dg-footer>
           <clr-dg-pagination #pagination [clrDgPageSize]="10">
@@ -81,7 +78,7 @@
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink>ข้อมูลผู้ป่วยที่ลงทะเบียนรอรับยา</button>
+    <button clrTabLink>ทะเบียนที่ออกหมายเลขรับยา</button>
     <clr-tab-content *clrIfActive="false">
       <clr-datagrid [(clrDgSelected)]="selected" [clrDgLoading]="loading">
 
@@ -104,14 +101,46 @@
           <clr-dg-cell>{{q.service_point_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-primary">
-              <button (click)="printSlip(q.queue_id,q.clinic_name)" class="btn">
-                <clr-icon shape="printer"></clr-icon> พิมพ์
+              <button (click)="printSlip(q.queue_id,q.clinic_name)" class="btn btn-block">
+                <clr-icon shape="printer"></clr-icon> พิมพ์ซ้ำ
               </button>
-              <button class="btn btn-danger">
-                <clr-icon shape="undo"></clr-icon> ยกเลิก
-              </button>
+
             </div>
           </clr-dg-cell>
+
+
+        </clr-dg-row>
+
+
+        <clr-dg-footer>
+          <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Users per page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} users
+          </clr-dg-pagination>
+        </clr-dg-footer>
+
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink>ทะเบียนหมายเลขรับยาที่เข้า Robot</button>
+    <clr-tab-content *clrIfActive="false">
+      <clr-datagrid [clrDgLoading]="autoQueuPharmacyLoading">
+
+        <clr-dg-placeholder>We couldn't find any queue!</clr-dg-placeholder>
+
+        <clr-dg-column [clrDgField]="'queue'" [style.width.px]="100">ID</clr-dg-column>
+        <clr-dg-column [clrDgField]="'hn'" [style.width.px]="100">HN</clr-dg-column>
+        <clr-dg-column [clrDgField]="'vn'" [style.width.px]="100">VN</clr-dg-column>
+        <clr-dg-column [clrDgField]="'name'">ชื่อ-นามสกุล</clr-dg-column>
+        <clr-dg-column>เวลาที่รับ</clr-dg-column>
+        <clr-dg-row *clrDgItems="let q of autoQueuPharmacy" [clrDgItem]="queues">
+          <clr-dg-cell><strong style="font-size: large;">{{q.queue}}</strong></clr-dg-cell>
+          <clr-dg-cell> {{q.hn}}</clr-dg-cell>
+          <clr-dg-cell> {{q.vn}}</clr-dg-cell>
+          <clr-dg-cell> {{q.name}} {{q.surname}} </clr-dg-cell>
+          <clr-dg-cell>{{q.read_datetime | date:'h:mm a z'}}</clr-dg-cell>
 
 
         </clr-dg-row>

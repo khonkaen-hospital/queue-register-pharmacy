@@ -37,7 +37,7 @@ function printQueue(data, PrinterIp) {
           .text('ห้องตรวจ')
           .style('B')
           .text(data.clinicName)
-          .barcode(data.hn, 'CODE39', { height: 70 })
+          .barcode(data.queueNumber, 'CODE39', { height: 70 })
           .text('')
           .text('วันที่: ' + dateTime)
           .text('')
@@ -50,7 +50,7 @@ function printQueue(data, PrinterIp) {
           .text('ห้องจ่ายยา')
           .text('')
           .size(1, 1)
-          .text('หมายเลขรับยา')
+          .text('หมายเลขรับยา(ไม่ใช่บัตรคิว)')
           .style('B')
           .size(2, 1)
           .text(data.queueNumber)
@@ -65,6 +65,7 @@ function printQueue(data, PrinterIp) {
           .text(data.hn)
           .size(1, 1)
           .text('')
+          .text('โปรดเก็บใบนี้ไว้เพื่อติดต่อรับยา!!! ')
           .text('วันที่ ' + dateTime)
           .qrimage(data.qrcode, { type: 'png', mode: 'dhdw', size: 3 }, function (err) {
             this.text('สแกน QR CODE ผ่านแอปพลิเคชัน H4U');

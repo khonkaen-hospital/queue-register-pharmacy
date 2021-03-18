@@ -52,6 +52,10 @@ export class LoginComponent implements OnInit {
             this.resetInvalidState();
           }
           this.submitBtnState = ClrLoadingState.SUCCESS;
+        }, error => {
+          this.submitBtnState = ClrLoadingState.ERROR;
+          this.message = 'Error!: ไม่สามารถเชื่อมต่อระบบได้ กรุณาลองใหม่อีกครั้ง';
+          this.isError = true;
         })
     }
   }
