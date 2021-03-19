@@ -56,6 +56,12 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     this.selectedPatient = { hn: '', fullname: '', clinic: '' };
   }
 
+  reloadData() {
+    this.getQueueActive(this.servicePointId || '');
+    this.getHisVisits();
+    this.getAutoQueuFormPharmacy('');
+  }
+
   setFocus() {
     setTimeout(() => {
       let ele = this.registerForm.nativeElement['search'];
@@ -184,7 +190,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         this.search = '';
         this.printSlip(result.queueId, patientVisit.clinic_name);
         this.getQueueActive(this.servicePointId || '');
-        this.getHisVisits();
+        this.reloadData();
         this.printConfirmModal = false;
       })
     }

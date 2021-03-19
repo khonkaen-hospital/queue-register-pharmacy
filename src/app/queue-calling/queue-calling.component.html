@@ -21,13 +21,20 @@
           </select>
         </clr-select-container>
       </div>
-      <div class="clr-col-6">
+      <div class="clr-col-3">
         <clr-input-container>
           <label>ค้นเพื่อลงทะเบียนรับยา</label>
           <div></div>
           <input (keyup)="delaySerch($event)" (keyup.enter)="delaySerch($event)" clrInput placeholder="คำค้น..."
             name="search" [(ngModel)]="search" />
         </clr-input-container>
+
+      </div>
+      <div class="clr-col-2">
+        <button (click)="reloadData()" class="btn btn-sm">
+          <clr-icon shape="refresh"></clr-icon>
+          Reload
+        </button>
       </div>
     </div>
 
@@ -39,7 +46,7 @@
 
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink>ทะเบียนผู้ป่วยที่มารับบริการ</button>
+    <button clrTabLink>ผู้ป่วยที่มารับบริการทุกห้องตรวจ ({{hisVisits.length}})</button>
     <clr-tab-content *clrIfActive="true">
       <clr-datagrid [clrDgLoading]="loading">
 
@@ -78,16 +85,16 @@
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink>ทะเบียนที่ออกหมายเลขรับยา</button>
+    <button clrTabLink>ทะเบียนที่ออกหมายเลขรับยา ({{queues.length}})</button>
     <clr-tab-content *clrIfActive="false">
       <clr-datagrid [(clrDgSelected)]="selected" [clrDgLoading]="loading">
 
         <clr-dg-placeholder>We couldn't find any queue!</clr-dg-placeholder>
 
-        <clr-dg-column [style.width.px]="100">ID</clr-dg-column>
-        <clr-dg-column [style.width.px]="100">HN</clr-dg-column>
-        <clr-dg-column [style.width.px]="100">VN</clr-dg-column>
-        <clr-dg-column>Name</clr-dg-column>
+        <clr-dg-column [clrDgField]="'queue_number'" [style.width.px]="100">ID</clr-dg-column>
+        <clr-dg-column [clrDgField]="'hn'" [style.width.px]="100">HN</clr-dg-column>
+        <clr-dg-column [clrDgField]="'vn'" [style.width.px]="100">VN</clr-dg-column>
+        <clr-dg-column [clrDgField]="'first_name'">Name</clr-dg-column>
         <clr-dg-column>Priority</clr-dg-column>
         <clr-dg-column>Clinic</clr-dg-column>
         <clr-dg-column [style.width.px]="200">Action</clr-dg-column>
@@ -124,7 +131,7 @@
   </clr-tab>
 
   <clr-tab>
-    <button clrTabLink>ทะเบียนหมายเลขรับยาที่เข้า Robot</button>
+    <button clrTabLink>ทะเบียนหมายเลขรับยาที่เข้า Robot ({{autoQueuPharmacy.length}})</button>
     <clr-tab-content *clrIfActive="false">
       <clr-datagrid [clrDgLoading]="autoQueuPharmacyLoading">
 
@@ -135,6 +142,7 @@
         <clr-dg-column [clrDgField]="'vn'" [style.width.px]="100">VN</clr-dg-column>
         <clr-dg-column [clrDgField]="'name'">ชื่อ-นามสกุล</clr-dg-column>
         <clr-dg-column>เวลาที่รับ</clr-dg-column>
+        <clr-dg-column [style.width.px]="200">Action</clr-dg-column>
         <clr-dg-row *clrDgItems="let q of autoQueuPharmacy" [clrDgItem]="queues">
           <clr-dg-cell><strong style="font-size: large;">{{q.queue}}</strong></clr-dg-cell>
           <clr-dg-cell> {{q.hn}}</clr-dg-cell>
@@ -142,7 +150,14 @@
           <clr-dg-cell> {{q.name}} {{q.surname}} </clr-dg-cell>
           <clr-dg-cell>{{q.read_datetime | date:'h:mm a z'}}</clr-dg-cell>
 
+          <clr-dg-cell>
+            <div class="btn-group btn-primary">
+              <button (click)="printSlip(q.queue_id,'')" class="btn btn-block">
+                <clr-icon shape="printer"></clr-icon> พิมพ์ซ้ำ
+              </button>
 
+            </div>
+          </clr-dg-cell>
         </clr-dg-row>
 
 

@@ -1,6 +1,6 @@
 {
   "name": "q4u-register",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -14,6 +14,7 @@
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron main.js --serve",
     "electron:build": "npm run build:prod && electron-builder build --macos --windows",
+    "electron:build-publish": "npm run build:prod && electron-builder build --macos --windows --publish always",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -82,7 +83,6 @@
     "directories": {
       "output": "release/"
     },
-    "publish": null,
     "files": [
       "dist/**/*",
       "print.js",
