@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, Menu } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -27,6 +27,7 @@ function createWindow(): BrowserWindow {
     },
   });
 
+
   if (serve) {
 
     win.webContents.openDevTools();
@@ -36,13 +37,17 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
 
   } else {
+
     console.log('PROD');
+
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/electron-angular/index.html'),
       protocol: 'file:',
       slashes: true
     }));
   }
+
+
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -55,6 +60,7 @@ function createWindow(): BrowserWindow {
   return win;
 }
 
+Menu.setApplicationMenu(null)
 try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
