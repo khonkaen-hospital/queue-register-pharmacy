@@ -62,7 +62,7 @@ function printQueue(data, PrinterIp) {
           .style('U')
           .text('ชื่อ-นามสกุล')
           .style('B')
-
+          .text(fullName)
           .style('U')
           .text('HN')
           .style('B')
