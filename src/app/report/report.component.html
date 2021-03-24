@@ -1,0 +1,60 @@
+<h1>สถิติประจำวัน</h1>
+
+
+<div class="clr-row">
+  <div class="clr-col-lg-3 clr-col-md-3 clr-col-12">
+    <div class="card">
+      <div class="card-block">
+        <div class="card-text">
+          <clr-spinner *ngIf="loading">Loading ...</clr-spinner>
+          <h1 class="count">{{total}}</h1>
+        </div>
+        <div class="card-title">
+          จำนวนรายการจ่ายยา
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clr-col-lg-3 clr-col-md-3 clr-col-12">
+    <div class="card">
+      <div class="card-block">
+
+        <div class="card-text">
+          <clr-spinner *ngIf="loading">Loading ...</clr-spinner>
+          <h1 class="count">{{avg}}</h1>
+        </div>
+        <div class="card-title">
+          ค่าเฉลี่ยระยะเวลารอคอย/นาที
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clr-col-lg-3 clr-col-md-3 clr-col-12">
+    <div class="card">
+      <div class="card-block">
+
+        <div class="card-text">
+          <clr-spinner *ngIf="loading">Loading ...</clr-spinner>
+          <h1 class="count">{{manual}}</h1>
+        </div>
+        <div class="card-title">
+          ผู้ป่วยที่ได้รับหมายเลขรับยา
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clr-col-lg-3 clr-col-md-3 clr-col-12">
+    <div class="card">
+      <div class="card-block">
+
+        <div class="card-text">
+          <clr-spinner *ngIf="loading">Loading ...</clr-spinner>
+          <h1 class="count">{{auto}}</h1>
+        </div>
+        <div class="card-title">
+          ผู้ป่วยที่ไม่ได้รับหมายเลขรับยา
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,6 +16,7 @@ const routes: Routes = [
       { path: 'settings', component: SettingsComponent, pathMatch: 'full' },
     ]
   },
+  { path: 'report', loadChildren: () => import('./report/report.module').then(m => m.ReportModule) },
   {
     path: '**', component: BlankLayoutComponent, children: [
       { path: '', component: PageNotfoundComponent }
