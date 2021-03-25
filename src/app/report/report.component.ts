@@ -27,10 +27,10 @@ export class ReportComponent implements OnInit {
     this.loading = true;
     this.reportService.getTodayReport().subscribe(result => {
       this.reports = result.result;
-      this.total = result.result.total;
-      this.avg = result.result.avg.toFixed(0);
-      this.manual = result.result.manual;
-      this.auto = result.result.auto;
+      this.total = result.result.total || 0;
+      this.avg = result.result.avg?.toFixed(0) || 0;
+      this.manual = result.result.manual || 0;
+      this.auto = result.result.auto || 0;
       this.loading = false;
       console.log(result);
     })
