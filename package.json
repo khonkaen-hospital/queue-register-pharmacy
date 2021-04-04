@@ -30,7 +30,7 @@
     "@angular/platform-browser-dynamic": "~11.0.1",
     "@angular/router": "~11.0.1",
     "@auth0/angular-jwt": "^5.0.2",
-    "@cds/core": "^5.0.3",
+    "@cds/core": "5.0.3",
     "@clr/angular": "5.0.3",
     "@clr/icons": "5.0.3",
     "@clr/ui": "5.0.3",
