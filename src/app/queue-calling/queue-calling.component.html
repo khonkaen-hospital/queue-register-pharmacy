@@ -5,6 +5,7 @@
 
 
     <div class="clr-row">
+
       <div class="clr-col-2">
         <clr-select-container>
           <label>ห้องตรวจ</label>
@@ -13,6 +14,7 @@
           </select>
         </clr-select-container>
       </div>
+
       <div class="clr-col-4">
         <clr-select-container>
           <label>ประเภทผู้ป่วย</label>
@@ -21,16 +23,26 @@
           </select>
         </clr-select-container>
       </div>
-      <div class="clr-col-3">
+
+      <div class="clr-col-2">
         <clr-input-container>
           <label>ค้นเพื่อลงทะเบียนรับยา</label>
           <div></div>
           <input (keyup)="delaySerch($event)" (keyup.enter)="delaySerch($event)" clrInput placeholder="คำค้น..."
             name="search" [(ngModel)]="search" />
         </clr-input-container>
-
       </div>
+
       <div class="clr-col-2">
+        <clr-input-container>
+          <label>User ID</label>
+          <div></div>
+          <input (keyup.enter)="onSetUserId($event)" clrInput placeholder="User Id..." name="robotUserId"
+            [(ngModel)]="robotUserId" />
+        </clr-input-container>
+      </div>
+
+      <div class="clr-col-1">
         <button (click)="reloadData()" class="btn btn-sm">
           <clr-icon shape="refresh"></clr-icon>
           Reload
@@ -108,7 +120,7 @@
           <clr-dg-cell>{{q.service_point_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-primary">
-              <button (click)="printSlip(q.queue_id,'')" class="btn btn-block">
+              <button (click)="printSlip(q.queue_id,'',q.vn)" class="btn btn-block">
                 <clr-icon shape="printer"></clr-icon> พิมพ์ซ้ำ
               </button>
 
@@ -152,7 +164,7 @@
 
           <clr-dg-cell>
             <div class="btn-group btn-primary">
-              <button (click)="printSlip(q.queue_id,'')" class="btn btn-block">
+              <button (click)="printSlip(q.queue_id,'',q.vn)" class="btn btn-block">
                 <clr-icon shape="printer"></clr-icon> พิมพ์ซ้ำ
               </button>
 

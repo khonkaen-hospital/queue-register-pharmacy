@@ -30,6 +30,7 @@ import { FormsModule } from '@angular/forms';
   ],
   providers: [
     { provide: 'API_URL', useValue: environment.apiUrl },
+    { provide: 'ROBOT_API_URL', useValue: environment.robotApiUrl },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

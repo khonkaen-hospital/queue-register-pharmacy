@@ -27,7 +27,6 @@ function createWindow(): BrowserWindow {
     },
   });
 
-
   if (serve) {
 
     win.webContents.openDevTools();
@@ -47,8 +46,6 @@ function createWindow(): BrowserWindow {
     }));
   }
 
-
-
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store window
@@ -60,7 +57,8 @@ function createWindow(): BrowserWindow {
   return win;
 }
 
-Menu.setApplicationMenu(null)
+// Menu.setApplicationMenu(null);
+
 try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.

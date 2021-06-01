@@ -9,6 +9,7 @@ export class QueueService {
 
   constructor(
     @Inject('API_URL') private apiUrl: String,
+    @Inject('ROBOT_API_URL') private robotApiUrl: String,
     private http: HttpClient
   ) { }
 
@@ -38,5 +39,9 @@ export class QueueService {
 
   getPriorities(): Observable<any> {
     return this.http.get(this.apiUrl + '/priorities');
+  }
+
+  setRobotQueueCheckin(data: any): Observable<any> {
+    return this.http.post(this.robotApiUrl + '/api/quecheckin', data);
   }
 }

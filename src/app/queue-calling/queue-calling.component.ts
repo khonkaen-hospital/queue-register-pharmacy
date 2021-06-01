@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, AfterViewInit, ElementRef, ViewCh
 import { QueueService } from './queue.service';
 import { HttpParams } from '@angular/common/http';
 import { ElectronService } from 'ngx-electron';
+import * as moment from 'moment';
 
 
 interface Patient {
@@ -34,6 +35,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   servicePointName: string | null;
   prioritieId: string | null;
   search: string;
+  robotUserId: string;
   printConfirmModal: boolean = false;
   selectedPatient: Patient;
   timer: any;
@@ -54,6 +56,10 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     this.getAutoQueuFormPharmacy('');
     this.setFocus();
     this.selectedPatient = { hn: '', fullname: '', clinic: '' };
+    let robotUserId = localStorage.getItem('userRobotId');
+    if (robotUserId) {
+      this.robotUserId = robotUserId;
+    }
   }
 
   reloadData() {
@@ -186,26 +192,48 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         sex: patientVisit.sex
       }
       this.queueService.registerQueue(data).subscribe(result => {
-        console.log(result);
+        console.log('Queue=', result);
         this.search = '';
-        this.printSlip(result.queueId, patientVisit.clinic_name);
         this.getQueueActive(this.servicePointId || '');
         this.reloadData();
+        this.setRobotQueueCheckin({
+          user_id: this.robotUserId,
+          que: result.queueNumber,
+          date: moment().locale('th').format('YYYY-MM-DD'),
+          time: moment().locale('th').format('HH:mm')
+        });
         this.printConfirmModal = false;
+        this.printSlip(result.queueId, patientVisit.clinic_name, result.vn);
       })
     }
   }
 
-  printSlip(queue_id: string, clinic_name: string) {
+  printSlip(queue_id: string, clinic_name: string, vn: string) {
     this.queueService.getPrintData(queue_id).subscribe(result => {
       this.electronService.ipcRenderer.sendSync('printQueue', {
         ...result.data, ...{
           printerIp: localStorage.getItem('printerIp') || '',
           servicePointId: this.servicePointId,
-          clinicName: clinic_name
+          clinicName: clinic_name,
+          vn: vn
         }
       });
     })
   }
+
+  setRobotQueueCheckin(data: any) {
+    try {
+      this.queueService.setRobotQueueCheckin(data).subscribe(result => {
+        console.log(result);
+      });
+    } catch (error) {
+
+    }
+  }
+
+  onSetUserId($event: any) {
+    localStorage.setItem('userRobotId', this.robotUserId);
+  }
+
 
 }
