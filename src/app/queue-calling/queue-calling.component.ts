@@ -196,12 +196,16 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         this.search = '';
         this.getQueueActive(this.servicePointId || '');
         this.reloadData();
-        this.setRobotQueueCheckin({
-          user_id: this.robotUserId,
-          que: result.queueNumber,
-          date: moment().locale('th').format('YYYY-MM-DD'),
-          time: moment().locale('th').format('HH:mm')
-        });
+        if (result.isDuplicate === 0) {
+          this.setRobotQueueCheckin({
+            hn: result.hn,
+            vn: result.vn,
+            user_id: this.robotUserId,
+            que: result.queueNumber,
+            date: moment().locale('th').format('YYYY-MM-DD'),
+            time: moment().locale('th').format('HH:mm')
+          });
+        }
         this.printConfirmModal = false;
         this.printSlip(result.queueId, patientVisit.clinic_name, result.vn);
       })
