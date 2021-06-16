@@ -79,7 +79,8 @@
           <clr-dg-cell>{{v.date_serv | date}} {{v.time_serv}}</clr-dg-cell>
 
           <clr-dg-cell>
-            <button (click)="onRegister(v)" class="btn btn-block   btn-outline-success">
+            <button [clrLoading]="loadingRegisterQueue" (click)="onRegister(v)"
+              class="btn btn-block   btn-outline-success">
               <clr-icon shape="printer"></clr-icon> ลงทะเบียนหมายเลขรับยา
             </button>
           </clr-dg-cell>
@@ -186,9 +187,10 @@
 </clr-tabs>
 
 
-
 <clr-modal [(clrModalOpen)]="printConfirmModal">
-  <h3 class="modal-title">ยืนยันการลงทะเบียนรับยา!</h3>
+  <h3 class="modal-title">ยืนยันการลงทะเบียนรับยา
+
+  </h3>
   <div class="modal-body">
     <table class="table table-vertical">
       <caption>
@@ -197,11 +199,15 @@
       <tbody>
         <tr>
           <th [style.width.px]="100">HN</th>
-          <td>{{selectedPatient.hn}}</td>
+          <td style="font-size:20px;color:dodgerblue;">{{selectedPatient.hn}}</td>
+        </tr>
+        <tr>
+          <th [style.width.px]="100">VN</th>
+          <td style="font-size:20px;color:mediumvioletred">{{selectedPatient.vn}}</td>
         </tr>
         <tr>
           <th>ชื่อ-นามสกุล</th>
-          <td>{{selectedPatient.fullname}}</td>
+          <td style="font-size:20px;">{{selectedPatient.fullname}}</td>
         </tr>
         <tr>
           <th>ห้องตรวจ</th>
@@ -217,6 +223,8 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline" (click)="printConfirmModal = false">ยกเลิก</button>
-    <button type="button" #btnConfirmPrint class="btn btn-primary" (click)="onConfirmPrint()">ยืนยัน</button>
+    <button [clrLoading]="loadingRegisterQueue" type="button" #btnConfirmPrint class="btn btn-primary"
+      (click)="onConfirmPrint()">ยืนยัน
+    </button>
   </div>
 </clr-modal>

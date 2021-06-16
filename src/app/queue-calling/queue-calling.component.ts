@@ -3,10 +3,11 @@ import { QueueService } from './queue.service';
 import { HttpParams } from '@angular/common/http';
 import { ElectronService } from 'ngx-electron';
 import * as moment from 'moment';
-
+import { ClrLoadingState } from '@clr/angular';
 
 interface Patient {
   hn: string;
+  vn: string;
   fullname: string;
   clinic: string;
   date?: string;
@@ -37,6 +38,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   search: string;
   robotUserId: string;
   printConfirmModal: boolean = false;
+  loadingRegisterQueue: ClrLoadingState = ClrLoadingState.DEFAULT;
   selectedPatient: Patient;
   timer: any;
 
@@ -55,7 +57,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     this.getHisVisits();
     this.getAutoQueuFormPharmacy('');
     this.setFocus();
-    this.selectedPatient = { hn: '', fullname: '', clinic: '' };
+    this.selectedPatient = { vn: '', hn: '', fullname: '', clinic: '' };
     let robotUserId = localStorage.getItem('userRobotId');
     if (robotUserId) {
       this.robotUserId = robotUserId;
@@ -101,10 +103,12 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     const httpParams = new HttpParams().set('query', this.search || '');
     this.queueService.getHisVisits(httpParams).subscribe(results => {
       this.hisVisits = results.results;
+
       if (this.hisVisits.length === 1) {
         this.printConfirmModal = true;
         this.selectedPatient = {
           hn: this.hisVisits[0].hn,
+          vn: this.hisVisits[0].vn,
           fullname: this.hisVisits[0].title + this.hisVisits[0].first_name + ' ' + this.hisVisits[0].last_name,
           clinic: this.hisVisits[0].clinic_name,
           time: this.hisVisits[0].time_serv,
@@ -175,6 +179,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   }
 
   onRegister(patientVisit: any) {
+    this.loadingRegisterQueue = ClrLoadingState.LOADING;
     if (this.servicePointId && this.prioritieId) {
       let data = {
         hn: patientVisit.hn,
@@ -192,6 +197,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         sex: patientVisit.sex
       }
       this.queueService.registerQueue(data).subscribe(result => {
+        this.loadingRegisterQueue = ClrLoadingState.SUCCESS;
         console.log('Queue=', result);
         this.search = '';
         this.getQueueActive(this.servicePointId || '');
@@ -209,7 +215,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         this.printConfirmModal = false;
         this.printSlip(result.queueId, patientVisit.clinic_name, result.vn);
       })
-    }
+    } else this.loadingRegisterQueue = ClrLoadingState.SUCCESS;
   }
 
   printSlip(queue_id: string, clinic_name: string, vn: string) {
