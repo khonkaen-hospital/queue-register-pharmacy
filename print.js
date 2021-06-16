@@ -74,8 +74,9 @@ function printQueue(data, PrinterIp) {
           .size(1, 1)
           .text('โปรดเก็บใบนี้ไว้เพื่อติดต่อรับยา!!! ')
           .text('วันที่ ' + dateTime)
-          .qrimage(data.qrcode, { type: 'png', mode: 'dhdw', size: 3 }, function (err) {
-            this.text('สแกน QR CODE ผ่านแอปพลิเคชัน H4U');
+          .qrimage(data.queueNumber, { type: 'png', mode: 'dhdw', size: 3 }, function (err) {
+            //this.text('สแกน QR CODE ผ่านแอปพลิเคชัน H4U');
+            this.text('สแกน QR CODE ที่หน้าตู้ KIOSK เพื่อตรวจสอบสถานะ');
             this.text('');
             this.cut();
             this.close();
