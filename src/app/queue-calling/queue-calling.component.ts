@@ -73,7 +73,6 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   setFocus() {
     setTimeout(() => {
       let ele = this.registerForm.nativeElement['search'];
-      console.log(ele);
       ele.focus();
     }, 100);
   }
@@ -197,7 +196,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         sex: patientVisit.sex
       }
       this.queueService.registerQueue(data).subscribe(result => {
-        this.loadingRegisterQueue = ClrLoadingState.SUCCESS;
+
         console.log('Queue=', result);
         this.search = '';
         this.getQueueActive(this.servicePointId || '');
@@ -212,7 +211,13 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
             time: moment().locale('th').format('HH:mm')
           });
         }
+
+        setTimeout(() => {
+          this.loadingRegisterQueue = ClrLoadingState.SUCCESS;
+        }, 1000);
         this.printConfirmModal = false;
+        this.setFocus();
+
         this.printSlip(result.queueId, patientVisit.clinic_name, result.vn);
       })
     } else this.loadingRegisterQueue = ClrLoadingState.SUCCESS;

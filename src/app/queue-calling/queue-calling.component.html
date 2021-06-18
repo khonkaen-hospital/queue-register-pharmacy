@@ -223,8 +223,9 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline" (click)="printConfirmModal = false">ยกเลิก</button>
-    <button [clrLoading]="loadingRegisterQueue" type="button" #btnConfirmPrint class="btn btn-primary"
+    <button type="button" [disabled]="loadingRegisterQueue===1" #btnConfirmPrint class="btn btn-primary"
       (click)="onConfirmPrint()">ยืนยัน
     </button>
   </div>
+
 </clr-modal>
