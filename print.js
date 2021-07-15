@@ -59,6 +59,7 @@ function printQueue(data, PrinterIp) {
           .size(1, 1)
           .text('หมายเลขรับยา(ไม่ใช่บัตรคิว)')
           .text('')
+          .barcode(data.queueNumber, 'CODE39', { height: 70 })
           .size(1, 1)
           .text('ประเภท')
           .style('B')
