@@ -177,7 +177,14 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
     localStorage.setItem('prioritieId', event.target.value);
   }
 
-  onRegister(patientVisit: any) {
+  async onRegister(patientVisit: any) {
+
+    let waitingTime = '';
+    const checkWaitingTime = await this.queueService.checkWaitingTime().toPromise();
+    if (checkWaitingTime && checkWaitingTime.data.length > 0) {
+      waitingTime = checkWaitingTime.data[0].avgwait;
+    }
+
     this.loadingRegisterQueue = ClrLoadingState.LOADING;
     if (this.servicePointId && this.prioritieId) {
       let data = {
@@ -218,19 +225,20 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
         this.printConfirmModal = false;
         this.setFocus();
 
-        this.printSlip(result.queueId, patientVisit.clinic_name, result.vn);
+        this.printSlip(result.queueId, patientVisit.clinic_name, result.vn, waitingTime);
       })
     } else this.loadingRegisterQueue = ClrLoadingState.SUCCESS;
   }
 
-  printSlip(queue_id: string, clinic_name: string, vn: string) {
+  printSlip(queue_id: string, clinic_name: string, vn: string, waitingTime: string = '') {
     this.queueService.getPrintData(queue_id).subscribe(result => {
       this.electronService.ipcRenderer.sendSync('printQueue', {
         ...result.data, ...{
           printerIp: localStorage.getItem('printerIp') || '',
           servicePointId: this.servicePointId,
           clinicName: clinic_name,
-          vn: vn
+          vn: vn,
+          waitingTime: waitingTime
         }
       });
     })

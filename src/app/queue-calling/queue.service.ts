@@ -29,6 +29,10 @@ export class QueueService {
     return this.http.post(this.apiUrl + '/queue/register/pharmacy-robot', data);
   }
 
+  checkWaitingTime(): Observable<any> {
+    return this.http.get(this.apiUrl + '/queue/queue-avgwait');
+  }
+
   getHisVisits(params: HttpParams): Observable<any> {
     return this.http.get(this.apiUrl + '/queue/his-visit-robot', { params: params });
   }
