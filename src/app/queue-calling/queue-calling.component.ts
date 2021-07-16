@@ -231,6 +231,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
   }
 
   printSlip(queue_id: string, clinic_name: string, vn: string, waitingTime: string = '') {
+    console.log('waitingTime===', waitingTime);
     this.queueService.getPrintData(queue_id).subscribe(result => {
       this.electronService.ipcRenderer.sendSync('printQueue', {
         ...result.data, ...{
@@ -238,7 +239,7 @@ export class QueueCallingComponent implements OnInit, AfterViewInit {
           servicePointId: this.servicePointId,
           clinicName: clinic_name,
           vn: vn,
-          waitingTime: waitingTime
+          waitingTime: parseInt(waitingTime)
         }
       });
     })
